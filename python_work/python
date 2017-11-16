@@ -1,0 +1,98 @@
+from day 4, use python2.7 (not default pyt$hon (2.6))
+
+make a library
+
+$mkdir mylib
+$touch mylib/__init__.py
+$python2.7
+>>>import mylib
+$vi mylib/myfuncs.py
+$python2.7
+>>>import mylib
+>>>import mylib/myfuncs
+
+DICTIONARIES
+
+unordered collection of key/value pairs.
+Keys are:
+-immutable (like a tuple, not like a list)
+-unique
+-not sorted in any order (like a set)
+-no restriction on value
+
+create by putting key:value pairs in {}
+birthdays = {'Newton' : 1642, 'Darwin' : 1809}
+if you only had commas, you'd be making a set
+
+retrieve key using []
+like indexing strings/lists
+print birthdays['Newton']
+1642
+
+add new values by assigning to it
+birthdays['Turing']= 1612 #wrong date
+you can overwrite in this way as well.
+
+keys must be present before use. otherwise, get a KeyError
+test if key is present using 'in':
+
+'Nightingale' in birthdays
+False
+
+use 'for' to loop over keys
+for name in birthdays:
+	print name, birthdays[name]
+Turing 1612
+Newton 1642
+Darwin 1809
+or  whatever they were...
+
+birthdays.keys() lists all the keys
+birthdays.values() does the same for values
+birthdays.items() does all the pairs of keys and values
+
+SETS AND DICTIONARIES EXERCISE PARTS 2 AND 3
+
+band = ['mel', 'geri', 'victoria', 'mel', 'emma']
+counts = {} #create empty dictionary
+for name in band:
+	if name not in counts:
+		counts[name] = 1
+	else:
+		counts[name] += 1
+for name in counts:
+	print name, counts[name]
+
+if {}: print 'BOOYAH' #false, no output given
+d = {'maggie' : 'uk', 'ronnie' : 'usa'}
+dir(d)
+d.items()
+d.keys()
+d.values()
+
+you get:
+>>> d.items()
+[('maggie', 'uk'), ('ronnie', 'usa')]
+>>> d.keys()
+['maggie', 'ronnie']
+>>> d.values()
+['uk', 'usa']
+
+d.get('maggie', 'nowehere') # asking it to tell me the value assigned to 'maggie' key, and return 'nowhere' if the key can't be found
+
+gives 'uk'
+
+d.get('ringo', 'nowehere')
+
+gives 'nowhere'
+
+res = d.setdefault('mikhail', 'ussr')
+print res, d['mikhail']
+
+gives:
+>>> res = d.setdefault('mikhail', 'ussr')
+>>> print res, d['mikhail']
+ussr ussr
+
+#this course brought to you by Victor Chechik?
+
