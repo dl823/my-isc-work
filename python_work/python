@@ -279,3 +279,117 @@ arr.reshape(2, 2, 2)
 arr.transpose()
 arr.ravel()
 print arr.astype(np.float64)
+
+CALCULATIONS WITH ARRAYS
+
+multiply together, element by element
+
+make two arrays a and b i.e. a = np.array([vsfdv], [vasdfa])
+product_ab = np.zeros(shape_a, dtype=np.float32)
+can loop over product of two elements andput to a new array.
+
+must use xrange to make a list of indices
+(like range, but only provides one element at a time)
+
+simple way:
+product_ab = a  * b
+c = a + b
+
+these do ELEMENT BY ELEMENT
+
+booleans of arrays will give an array of true/false
+e.g for if you asked if the elements were >3
+
+ARRAY CALCULATIONS AND OPERATIONS EXERCISE
+
+import numpy as np
+a = np.array([range(4), range(10,14)])
+b = np.array([2, -1, 1, 0])
+print a*b
+b1 = b*100
+b2 = b*100.0
+print b1
+print b2
+b1 == b2 # gives 4x1 array of True
+print b1.dtype, b2.dtype # get int64 and float64
+arr = np.arange(10)
+print arr < 3
+print np.less(arr, 3) # does same as line above
+#both above give [ True  True  True False False False False False False False]
+condition = np.logical_or(arr < 3, arr > 8)
+new_arr = np.where(condition, arr * 5, arr * -5)
+print new_arr #gives [  0,   5,  10, -15, -20, -25, -30, -35, -40,  45]
+def calcMagnitude(u, v, minmag = 0.1):
+	mag = ((u**2) + (v**2))**0.5
+	output = np.where(mag > minmag, mag, minmag)
+	return output
+u = np.array([[4, 5, 6], [2, 3, 4]])
+v = np.array([[2, 2, 2], [1, 1, 1]])
+print calcMagnitude(u, v)
+#get [[ 4.47213595  5.38516481  6.32455532]
+#    [ 2.23606798  3.16227766  4.12310563]]
+u = np.array([[4, 5, 0.01], [2, 3, 4]])
+v = np.array([[2, 2, 0.03], [1, 1, 1]])
+print calcMagnitude(u, v)
+#get [[ 4.47213595  5.38516481  0.1      ]
+#    [ 2.23606798  3.16227766  4.12310563]]
+#note the 3rd value = 0.1, minimum in effect
+
+HANDLING MISSING VALUES
+
+e.g. ocean data, certain point are land therefore no valid data
+masked array includes a mask of bad values that travels with the array
+like an overlay that tells python which values should be omitted
+
+import numpy.ma as MA
+import numpy as np
+
+a = MA.masked_array(data = [1, 2, 3], mask = [True, True, False])
+True = mask the data i.e above gives [-- -- 3]
+
+you can do operations to the masked array normally
+b+c masks any outputs where either input is masked
+
+FILL VALUES
+
+writing data to a file, you want an unmasked array,
+but with zeros, for example
+
+e.g save writing a full data array and a mask to go with it.
+fill value should be outside the data range.
+
+can specify fill value as a third argument in:
+MA.masked_array(arg1, arg2, HERE)
+
+MISSING VALUES EXERCISE
+
+import numpy.ma as MA
+marr = MA.masked_array(range(10), fill_value = -999)
+print marr,  marr.fill_value
+marr[2] = MA.masked # mask the 3nd value in marr
+print marr
+#gives [0 1 -- 3 4 5 6 7 8 9]
+print marr.mask #prints the mask applied to marr
+#get [False False  True False False False False False False False]
+narr = MA.masked_where(marr>6, marr)
+print narr
+#gives [0 1 -- 3 4 5 6 -- -- --]
+print narr.fill_value # gives -999
+x = MA.filled(narr)
+print x
+#gives [   0    1 -999    3    4    5    6 -999 -999 -999]
+print type(x) #gives 'numpy.ndarray'
+m1 = MA.masked_array(range(1,9))
+print m1
+m2 = m1.reshape(2,4)
+print m2
+m3 = MA.masked_greater(m2, 6)
+print m3
+print m3*100
+res = m3 - np.ones((2, 4))
+print res
+#gives [[0.0 1.0 2.0 3.0]
+#      [4.0 5.0 -- --]]
+type(res) #gives <class 'numpy.ma.core.MaskedArray'>
+
+
