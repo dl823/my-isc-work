@@ -96,3 +96,186 @@ ussr ussr
 
 #this course brought to you by Victor Chechik?
 
+
+ERRORS
+
+syntax error. wrong notation, commas, apostrophes in the wrong places.
+code won't run, python tries to point out the location of the error
+
+exceptions - syntax corrrect, but error during execution.
+doesn't automatically stop script.
+e.g. type error from '2' + 2
+
+python tells us the type of exception error:
+-zerodivisionerror
+-nameerror
+-typeerror
+you can define your own as well
+
+catch errors with try / except
+
+try:
+	result = runMyClimateModel(experiment)
+except:
+	#it failed, so do something sensible
+	emailMe('no results fool')
+	print "it's not a good model"
+
+can trigger own exceptions with 'raise'
+
+if validate(input) == false:
+	raise exception('bad input provided')
+	#program will stop unless exception caught
+else:
+	print 'great job...'
+
+and it continues as normal
+
+basically make except clauses so you are notified of any errors
+that occur, but all cases that work fine are still processed.
+
+DEBUGGING - we've been using 'print' ti see what's happening.
+not practical for gigabytes of script.
+set break points in the code.
+
+import pdb # import  python debugger
+
+not necessary for little scripts...
+super useful for large scale work!
+
+OBJECT-ORIENTATED PROGRAMMING (OOP)
+probably a bit advance for me...
+
+################################
+
+NumPy - HANDLING ARRAYS IN PYTHON (only in 2.7)
+
+array like a list except:
+-all elements are the SAME TYPE
+-multi-dimensional arrays more obviously supported
+-array operations supported
+
+NumPy is the standard array package in python.
+
+Creating array:
+import numpy as np
+a = np.array([[2, 5, -5], [21, -2, 1]])
+
+can have anothert input to define type:
+a = np.array([[2, 5, -5], [21, -2, 1]], dtype = np.int32)
+#32 bit integer
+
+defaults to the type it sees in the list.
+
+np.float64	double precision float
+np.float32	single precision float
+np.int8		byte
+np.int64	long integer
+
+zeros function:
+a = np.zeros((3, 2), dtype=np.floar64)
+
+can also use range as with lists:
+a = np.arange(10)	#array range 1-10
+
+Indexing arrays:
+1 dimension
+
+first element of a 1D array is a[0], second a[1] etc
+element range separated by colon a[4:8]
+can exlude 1st or 2nd element for 'everything up to/after'
+
+2+ dimensions. Put commas in between different dimentions e.g
+a[(2,3)] #for 2nd row 3rd column, or whatever
+
+depending on what you index, you can get an integer,
+or an array of fewer dimensions.
+
+INTRODUCTION TO NumPy ARRAYS EXERCISE
+
+import numpy as np
+x = range(1, 11)
+a1 = np.array(x, np.int32)
+a2 = np.array(x, np.float32)
+print a1.dtype #gives int32
+print a2.dtype #gives float32
+
+arr = np.zeros((2, 3, 4))
+print arr
+#gives
+#[[[ 0.  0.  0.  0.]
+# [ 0.  0.  0.  0.]
+# [ 0.  0.  0.  0.]]
+#
+#[[ 0.  0.  0.  0.]
+# [ 0.  0.  0.  0.]
+# [ 0.  0.  0.  0.]]]
+
+arr = np.ones((2, 3, 4))
+print arr # as above but with '1's
+
+arr = np.arange(1000)
+print arr
+
+a = [2, 3.2, 5.5, -6.4, -2.2, 2.4]
+print a[1] #gives 3.2
+print a[1:4] #gives [3.2, 5.5, -6.4]
+
+a = np.array([[2, 3.2, 5.5, -6.4, -2.2, 2.4], [1, 22, 4, 0.1, 5.3, -9], [3, 1, 2.1, 21, 1.1, -2]])
+
+a[:, 3] # any row, third
+
+#gives 'array([ -6.4,   0.1,  21. ])'
+
+a[1:4, 0:4]
+
+#gives 'array([[  1. ,  22. ,   4. ,   0.1],
+#       [  3. ,   1. ,   2.1,  21. ]])'
+
+a[1:, 2]
+
+#gives 'array([ 4. ,  2.1])'
+
+
+
+INTERROGATING ARRAYS
+
+np.shape(a)
+np.ndim(a)
+np.size(a) NM DON'T USE len
+np.max(a)
+np.min(a)
+
+np.reshape(a, (2,3)) e.g. turning a 2by3 to a 3by2
+np.transpose(a)
+np.ravel(a) flatten to 1D
+np.concatenate((a,b))
+np.repeat(a, 3) repeats elements in a 3 times
+^ what happens for non-1D arrays???
+
+other notations available
+a.shape = np.shape(a)
+a.max() = np.max(a)
+a.repeat(3) = np.repeat(a, 3)
+
+a.dtype <-- interrogate data type
+b = a.astype(np.int32) <-- convert data type
+
+but some don't e.g.
+a.average won't do squat
+
+meshgrid is also a thing...
+
+INTERROGATING AND MANIPULATING ARRAYS EXERCISE
+
+import numpy as np
+arr = np.array([range(4), range(10, 14)])
+print arr.shape
+print arr.size
+print arr.max()
+print arr.min()
+
+arr.reshape(2, 2, 2)
+arr.transpose()
+arr.ravel()
+print arr.astype(np.float64)
