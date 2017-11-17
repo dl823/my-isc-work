@@ -500,3 +500,85 @@ lots of internal stuff for shading etc in Matplotlib
 
 can rapidly make scatter plots too with a scatter function
 
+#########
+
+PORTS
+
+Important detials:
+-baudrate (set of numbers, not a continuous scale)
+-bytesize
+-parity
+-stopbits
+
+there are other parameters, but we shouldn't be using any today
+
+/dev/ttyUSB0 is the first usb port
+/dev/ttyUSB1 is the 2nd etc
+In Linux ^^^
+
+don't have to use the above.
+can do by usb ID or by path...
+
+read() # fixes number of bytes
+readline() # read a new line of data ending with a new line
+^can't use readline for the thermometers we will be using
+
+our probes output 7 characters and a return = 8 bytes total (in ascii)
+
+TEMPERATURE PROBE EXERCISE
+
+#!/usr/bin/python2.7
+import serial
+ser = serial.Serial(
+	port='/dev/ttyUSB0',
+	baudrate=9600,
+	bytesize=serial.EIGHTBITS,
+	parity=serial.PARITY_NONE,
+	stopbits=serial.STOPBITS_ONE)
+
+print ser.read(size=8) #get +022.9C
+
+from datetime import datetime
+print datetime.utcnow().isoformat(), ser.read(size=8)
+
+datastring=ser.read(size=8)
+print datetime.utcnow().isoformat(), datastring
+#since you only get data once every 10 seconds,
+time can be recorded up to 10 seconds before the actual reading
+
+while ser.isOpen():
+	datastring=ser.read(size=8)
+	print datetime.utcnow().isoformat(), datastring
+
+import io
+sio = io.TextIOWrapper(io.BufferedRWPair(ser, ser, 1), encoding='ascii', newline='\r')
+while ser.isOpen():
+	datastring=sio.readline()
+	print datetime.utcnow().isoformat(), datastring
+
+#!/usr/bin/python
+from datetime import datetime
+import serial, io
+
+outfile='/tmp/serial-temperature.tsv'
+
+ser=serial.Serial(
+	port='/dev/ttyUSB0',
+	baudrate=9600)
+
+sio=io.TextIOWrapper(
+	io.BufferedRWPair(ser, ser, 1),
+	encoding='ascii', newline='\r')
+
+with open(outfile,'a') as f: #append to existing files
+	while ser.isOpen():
+		datastring=sio.readline() #\t is tab, \n is line separator
+		f.write(datetime.utcnow().isoformat() + '\t' + datastring + '\n')
+		f.flush() #force system to write to disk
+
+ser.close()
+
+##########
+
+WORKING WITH NetCDF FILES
+
